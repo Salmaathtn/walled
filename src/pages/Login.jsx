@@ -11,7 +11,15 @@ function Login() {
     password: "",
   });
 
- 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedLogin = localStorage.getItem("login");
+    console.log(storedLogin);
+    if (storedLogin) {
+      navigate("/dashboard"); // Redirect to dashboard if user is logged in
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     setLoginForm({ ...loginForm, [e.target.name]: e.target.value });

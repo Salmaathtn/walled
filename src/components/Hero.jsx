@@ -5,11 +5,24 @@ import { useEffect } from "react";
 
 function Hero() {
   const [showBalance, setShowBalance] = useState(true);
-  const [username, setUsername] = useState("");
+  const [users, setUsers] = useState([]);
   useEffect(() => {
-    const loginObj = localStorage.getItem("login");
-    const { email } = JSON.parse(loginObj);
-    setUsername(email);
+    async function getData() {
+      const url = "http://localhost:3000/users";
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
+
+        const json = await response.json();
+        setUsers(json);
+        console.log(json);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+    getData();
   }, []);
 
   return (
@@ -17,7 +30,7 @@ function Hero() {
       <div className="flex items-center justify-center">
         <div className="mr-auto">
           <h1 className="text-black text-6xl font-bold">
-            {`Good Morning, ${username}`}
+            {`Good Morning, ${users[0]?.name}`}
           </h1>
           <p className="text-black text-2xl mt-3">
             Check all your incoming and outgoing transactions here
